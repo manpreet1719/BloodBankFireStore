@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "160053306041",
+    "project_id": "bloodbankfirestore",
+    "storage_bucket": "bloodbankfirestore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160053306041:android:eca605e625d7c60ca03168",
+        "android_client_info": {
+          "package_name": "com.example.bloodbankfirestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160053306041-0138sns9v1q921lpa1t2btglqh7i3e06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0Q1bqqmtBFU_OSwiWTiW5q99DbXtUHF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160053306041-0138sns9v1q921lpa1t2btglqh7i3e06.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
