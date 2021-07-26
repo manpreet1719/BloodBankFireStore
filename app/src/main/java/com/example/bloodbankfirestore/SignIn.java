@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class SignIn extends AppCompatActivity {
 
     EditText mobile;
-    EditText password;
+    EditText Pass;
     FirebaseFirestore db;
 
 
@@ -21,7 +21,7 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         mobile = findViewById(R.id.editTextTextPersonName4);
-        password = findViewById(R.id.editTextTextPassword2);
+        Pass = findViewById(R.id.editTextTextPassword);
 
         db = FirebaseFirestore.getInstance();
 

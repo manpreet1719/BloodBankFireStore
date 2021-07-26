@@ -99,6 +99,9 @@ public class UpdateDonorDetail extends AppCompatActivity {
         public static final String STORAGE_PATH_UPLOADS = "uploads/";
         public static final String DATABASE_PATH_UPLOADS = "uploads";
     }
+
+
+
     public void selectimgeee(View view) {
 
         Intent intent = new Intent();

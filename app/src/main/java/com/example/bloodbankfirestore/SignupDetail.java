@@ -3,22 +3,30 @@ package com.example.bloodbankfirestore;
 public class SignupDetail {
 
     String name;
-    String pass;
+    String Email;
     String addd;
     String dob;
     String bldgrp;
     String lastdate;
     String mobilee;
+    String imageeurll;
 
-    public SignupDetail(String nme, String pass, String addd, String dobb, String lsttdate, String mobil, String bldgrpp) {
+   public SignupDetail ()
+   {
+
+   }
+
+
+    public SignupDetail(String nme, String Email, String addd, String dobb, String lsttdate, String mobil, String bldgrpp,String imageeurll) {
 
         this.name = nme;
-        this.pass = pass;
+        this.Email = Email;
         this.addd = addd;
         this.dob = dobb;
         this.lastdate = lsttdate;
         this.mobilee = mobil;
         this.bldgrp = bldgrpp;
+        this.imageeurll = imageeurll;
 
 
 
@@ -33,8 +41,8 @@ public class SignupDetail {
         return bldgrp;
     }
 
-    public String getPass() {
-        return pass;
+    public String getEmail() {
+        return Email;
     }
 
     public String getAddd() {
@@ -51,6 +59,10 @@ public class SignupDetail {
 
     public String getMobilee() {
         return mobilee;
+    }
+
+    public String getImageeurll() {
+        return imageeurll;
     }
 
 }

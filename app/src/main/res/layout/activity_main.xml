@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Admin Login"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="#5499C7"
+        android:backgroundTint="#ff8080"
         android:onClick="adminloginn"
        />
 
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Sign In"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="#5499C7"
+        android:backgroundTint="#ff8080"
         android:onClick="signinn"
         />
 
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:backgroundTint="#5499C7"
+        android:backgroundTint="#ff8080"
         android:onClick="Siguppp"
    />
 

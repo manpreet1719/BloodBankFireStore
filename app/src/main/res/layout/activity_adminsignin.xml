@@ -18,18 +18,19 @@
         android:hint="Mobile" />
 
     <EditText
-        android:id="@+id/editTextTextPassword2"
+        android:id="@+id/editTextTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="Password"/>
+        android:hint="Emailord"/>
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign In"
-        android:onClick="adminnnsign"/>
+        android:onClick="adminnnsign"
+        android:backgroundTint="#ff8080"/>
 
 </LinearLayout>

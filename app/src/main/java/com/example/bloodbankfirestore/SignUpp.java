@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -54,14 +56,16 @@ public class SignUpp extends AppCompatActivity {
 
 
    EditText namee;
-   EditText Passw;
+   EditText Email;
    EditText addr;
    EditText dob;
    EditText lstdate;
    EditText mobb;
    CheckBox chk;
    DatePickerDialog datePickerDialog;
-   String nme,pass,addd,dobb,lsttdate,mobil,bldgrpp;
+   String nme,Emaill,addd,dobb,lsttdate,mobil,bldgrpp;
+   String imageeurll;
+    int flag = 1 ;
 
     private Uri selectedImageUri = null;
     private Uri filePath;
@@ -81,13 +85,14 @@ public class SignUpp extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_upp);
 
         namee = findViewById(R.id.editTextTextPersonName);
-        Passw = findViewById(R.id.editTextTextPassword);
+        Email = findViewById(R.id.editTextTextPersonName6);
         addr = findViewById(R.id.editTextTextPersonName2);
         dob = findViewById(R.id.editTextDate);
         lstdate = findViewById(R.id.date);
@@ -140,20 +145,27 @@ public class SignUpp extends AppCompatActivity {
 
     }
 
+    public class Constants {
 
-//    private void SelectImage()
-//    {
-//
-//        // Defining Implicit Intent to mobile gallery
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(
-//                Intent.createChooser(
-//                        intent,
-//                        "Select Image from here..."),
-//                PICK_IMAGE_REQUEST);
-//    }
+        public static final String STORAGE_PATH_UPLOADS = "uploads/";
+        public static final String DATABASE_PATH_UPLOADS = "uploads";
+    }
+
+
+    public void selecttimagesign(View view) {  //change it
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(
+                        intent,
+                        "Select Image from here..."),
+                PICK_IMAGE_REQUEST);
+
+
+
+    }
 
 
     @Override
@@ -197,142 +209,171 @@ public class SignUpp extends AppCompatActivity {
     }
 
 
+    public void upldddsignup(View view) { //change it
 
-    public void selectimagee(View view) {
+        flag = 0;
 
-
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(
-                Intent.createChooser(
-                        intent,
-                        "Select Image from here..."),
-                PICK_IMAGE_REQUEST);
-
-
+        uploadFile();
 
     }
 
 
 
 
-    public void uplddimage(View view) {
-
-        uploadImage();
-
-
+    public String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
 
-
-    private void uploadImage()
-    {
+    private void uploadFile() {
+        //checking if file is available
         if (filePath != null) {
-
-            // Code for showing progressDialog while uploading
-            ProgressDialog progressDialog
-                    = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
+            //displaying progress dialog while image is uploading
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            // Defining the child of storageReference
-            StorageReference ref
-                    = storageReference
-                    .child(
-                            "images/"
-                                    + UUID.randomUUID().toString());
+            //getting the storage reference
+            StorageReference sRef = storageReference.child(AdminLogin.Constants.STORAGE_PATH_UPLOADS + System.currentTimeMillis() + "." + getFileExtension(filePath));
 
-            // adding listeners on upload
-            // or failure of image
-            ref.putFile(filePath)
-                    .addOnSuccessListener(
-                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
-
-                                @Override
-                                public void onSuccess(
-                                        UploadTask.TaskSnapshot taskSnapshot)
-                                {
-
-                                    // Image uploaded successfully
-                                    // Dismiss dialog
-                                    progressDialog.dismiss();
-                                    Toast
-                                            .makeText(SignUpp.this,
-                                                    "Image Uploaded!!",
-                                                    Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                            })
-
-                    .addOnFailureListener(new OnFailureListener() {
+            //adding the file to reference
+            sRef.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onFailure(@NonNull Exception e)
-                        {
-
-                            // Error, Image not uploaded
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //dismissing the progress dialog
                             progressDialog.dismiss();
-                            Toast.makeText(SignUpp.this,
-                                            "Failed " + e.getMessage(),
-                                            Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    })
-                    .addOnProgressListener(
-                            new OnProgressListener<UploadTask.TaskSnapshot>() {
 
-                                // Progress Listener for loading
-                                // percentage on the dialog box
+                            //displaying success toast
+                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+
+                            Task<Uri> task = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
-                                public void onProgress(
-                                        UploadTask.TaskSnapshot taskSnapshot)
-                                {
-                                    double progress
-                                            = (100.0
-                                            * taskSnapshot.getBytesTransferred()
-                                            / taskSnapshot.getTotalByteCount());
-                                    progressDialog.setMessage(
-                                            "Uploaded "
-                                                    + (int)progress + "%");
+                                public void onSuccess(Uri uri) {
+                                    imageeurll = uri.toString();
                                 }
                             });
+
+                            //creating the upload object to store uploaded image details
+//                            imageeurll = taskSnapshot.getDownloadUrl().toString();
+                            //Upload upload = new Upload(editTextName.getText().toString().trim(), taskSnapshot.getDownloadUrl().toString());
+
+                            //adding an upload to firebase database
+//                            String uploadId = mDatabase.push().getKey();
+//                            mDatabase.child(uploadId).setValue(upload);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //displaying the upload progress
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        }
+                    });
+        } else {
+            //display an error if no file is selected
         }
     }
+
+
+    private boolean validateInputs(String   nme, String Emaill, String addd, String dobb, String  lsttdate , String mobil,String bldgrpp,int flag ) {
+        if (nme.isEmpty()) {
+            namee.setError("Name required");
+            namee.requestFocus();
+            return true;
+        }
+
+        if (Emaill.isEmpty()) {
+            Email.setError("Email required");
+            Email.requestFocus();
+            return true;
+        }
+
+        if (addd.isEmpty()) {
+            addr.setError("Address required");
+            addr.requestFocus();
+            return true;
+        }
+        if (dobb.isEmpty()) {
+            dob.setError("DOB required");
+            dob.requestFocus();
+            return true;
+        }
+        if (lsttdate.isEmpty()) {
+            lstdate.setError("Last Blood Donated Date required");
+            lstdate.requestFocus();
+            return true;
+        }
+        if (mobil.isEmpty()) {
+            mobb.setError("Mobile required");
+            mobb.requestFocus();
+            return true;
+        }
+
+
+
+        if (bldgrpp.isEmpty()) {
+            Toast.makeText(this, "Choose BloodGroup ", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (flag == 1) {
+            Toast.makeText(this, "Choose Image and Click on Upload ", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 
 
     public void savedataa(View view) {
 
         nme = namee.getText().toString();
-        pass = Passw.getText().toString();
+        Emaill = Email.getText().toString();
         addd = addr.getText().toString();
         dobb =dob.getText().toString();
         lsttdate = lstdate.getText().toString();
         mobil = mobb.getText().toString();
         bldgrpp = spinner.getSelectedItem().toString();
 
-
-        signupDetail = new SignupDetail(nme,pass,addd,dobb,lsttdate,mobil,bldgrpp);
-
-        CollectionReference SignuppDetails = db.collection("signupdata");
-
-        SignuppDetails.add( signupDetail).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-
-                Toast.makeText(SignUpp.this, "Succesfully Signup", Toast.LENGTH_SHORT).show();
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(Exception e) {
-                Toast.makeText(SignUpp.this, "Failed To add data", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        if (!validateInputs(nme, Emaill, addd , dobb ,lsttdate,mobil,bldgrpp, flag)) {
 
 
+            signupDetail = new SignupDetail(nme, Emaill, addd, dobb, lsttdate, mobil, bldgrpp, imageeurll);
+
+            CollectionReference SignuppDetails = db.collection("signupdata");
+
+            SignuppDetails.add(signupDetail).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+
+                    Toast.makeText(SignUpp.this, "Succesfully Signup", Toast.LENGTH_SHORT).show();
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+                    Toast.makeText(SignUpp.this, "Failed To add data", Toast.LENGTH_SHORT).show();
+
+                }
+            });
 
 
+        }
 
 
     }

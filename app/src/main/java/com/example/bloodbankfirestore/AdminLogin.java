@@ -61,6 +61,7 @@ public class AdminLogin extends AppCompatActivity {
     StorageReference storageReference;
     //    private StorageReference storageReference;
     private final int PICK_IMAGE_REQUEST = 22;
+    int flag =1;
 
 
     @Override
@@ -162,6 +163,8 @@ public class AdminLogin extends AppCompatActivity {
 
     public void uplddd(View view) {
 
+        flag = 0;
+
         uploadFile();
 
     }
@@ -235,6 +238,39 @@ public class AdminLogin extends AppCompatActivity {
         }
     }
 
+
+
+    private boolean validateInputs(String namee, String address, String mob, String  bldgrp, int flag ) {
+        if (namee.isEmpty()) {
+            name.setError("Name required");
+            name.requestFocus();
+            return true;
+        }
+
+        if (address.isEmpty()) {
+            addd.setError("Brand required");
+            addd.requestFocus();
+            return true;
+        }
+
+        if (mob.isEmpty()) {
+            mobilee.setError("Description required");
+            mobilee.requestFocus();
+            return true;
+        }
+
+        if (bldgrp.isEmpty()) {
+            Toast.makeText(this, "Select BloodGroup", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (flag == 1) {
+            Toast.makeText(this, "Choose Image and click on Upload ", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+
     public void adddonorr(View view) {
 
 
@@ -243,29 +279,30 @@ public class AdminLogin extends AppCompatActivity {
         mob =mobilee.getText().toString();
         bldgrp = spinner.getSelectedItem().toString();
 
-
-        adminDetail = new AdminDetail(namee,address,mob,bldgrp,imageeurll );
-
-
-        CollectionReference admindetails = db.collection("admindata");
-
-        admindetails.add(adminDetail).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(AdminLogin.this, "Donor added", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure( Exception e) {
-
-                Toast.makeText(AdminLogin.this, "Not able to add Donor!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        if (!validateInputs(namee, address, mob , bldgrp, flag)) {
 
 
+            adminDetail = new AdminDetail(namee, address, mob, bldgrp, imageeurll);
 
 
+            CollectionReference admindetails = db.collection("admindata");
+
+            admindetails.add(adminDetail).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    Toast.makeText(AdminLogin.this, "Donor added", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(Exception e) {
+
+                    Toast.makeText(AdminLogin.this, "Not able to add Donor!", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+
+        }
 
 
 
